@@ -8,27 +8,32 @@
 using namespace std;
 
 // Team Members: Juelle Caldwell, Xander Mills, Richard Benji Priela
+
 int main()
 {
     const int limit = 8;
     unordered_set<string> unordered_ingredientSet;
     vector<string> distinctIngredients;
     unordered_set<string> seenOut;
+
     const vector<vector<string>> measureOptions = {
         {"", ""},
-        {"1/2 cup", "1/4 cup"},                           // 1. pizza cheese
-        {"1/2 cup", "1/4 cup"},                           // 2. diced onion
-        {"1/2 cup", "1/4 cup"},                           // 3. diced green pepper
-        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"}, // 4. pepperoni
-        {"1/2 cup", "1/4 cup"},                           // 5. sliced mushroom
-        {"1/2 cup", "1/4 cup"},                           // 6. diced jalapeno
-        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"}, // 7. sardines
-        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"}, // 8. pineapple chunks
-        {"1/2 cup", "1/4 cup"},                           // 9. tofu
-        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"}, // 10. ham chunks
-        {"sprinkle", "generous sprinkle"},                // 11. dry red pepper
-        {"sprinkle", "generous sprinkle"}                 // 12. dry basil
-    };
+        {"1/2 cup", "1/4 cup"},
+        {"1/2 cup", "1/4 cup"},
+        {"1/2 cup", "1/4 cup"},
+        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"},
+        {"1/2 cup", "1/4 cup"},
+        {"1/2 cup", "1/4 cup"},
+        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"},
+        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"},
+        {"1/2 cup", "1/4 cup"},
+        {"2 pieces", "3 pieces", "6 pieces", "8 pieces"},
+        {"sprinkle", "generous sprinkle"},
+        {"sprinkle", "generous sprinkle"}};
+  
+        
+
+    cout << "Welcome to the Pizza Builder!\n";
 
     cout << "Please choose crust option:\n"
          << "1. Regular crust\n"
@@ -72,8 +77,6 @@ int main()
         {
         case 1:
             sauce = "red sauce";
-            distinctIngredients.push_back("red sauce");
-            unordered_ingredientSet.insert("red sauce");
             break;
         case 2:
             sauce = "no red sauce";
@@ -182,31 +185,20 @@ int main()
 
     while (picked)
     {
-        cout << "Enter an amount:\n"
-             << "1. 2 pieces\n2. 4 pieces\n3. 6 pieces\n4. 8 pieces\n";
+        const auto &opts = measureOptions[pick]; // tie amount list to ingredient number
+        cout << "Choose amount for " << ingredients.back() << ":\n";
+        for (size_t i = 0; i < opts.size(); ++i)
+            cout << (i + 1) << ". " << opts[i] << "\n";
+
         int ingAmount;
         cin >> ingAmount;
-        while (ingAmount < 1 || ingAmount > 4)
+        while (ingAmount < 1 || ingAmount > static_cast<int>(opts.size()))
         {
-            cout << "Invalid option. Enter 1-4: ";
+            cout << "Invalid option. Enter 1-" << opts.size() << ": ";
             cin >> ingAmount;
         }
-        string ingAmountStr;
-        switch (ingAmount)
-        {
-        case 1:
-            ingAmountStr = "2 pieces";
-            break;
-        case 2:
-            ingAmountStr = "4 pieces";
-            break;
-        case 3:
-            ingAmountStr = "6 pieces";
-            break;
-        case 4:
-            ingAmountStr = "8 pieces";
-            break;
-        }
+        string ingAmountStr = opts[ingAmount - 1];
+
         cout << "You have selected: " << ingAmountStr
              << " of " << ingredients.back() << '\n';
         picked = false;
@@ -216,7 +208,6 @@ int main()
 
     while (more == 'y' || more == 'Y')
     {
-
         if (more == 'y' || more == 'Y')
         {
             cout << "Would you like to add more ingredients? (y/n): \n";
@@ -299,27 +290,24 @@ int main()
         if (unordered_ingredientSet.size() >= limit)
         {
             cout << "You have reached the maximum number of ingredients (" << limit << ").\n";
-
             more = 'n';
         }
 
-        cout << "Please choose one amount\n"
-             << "1. generous sprinkle\n"
-             << "2. generous sprinkles\n";
-        int sprinklePick;
-        cin >> sprinklePick;
-        while (sprinklePick != 1 && sprinklePick != 2)
-        {
-            cout << "Invalid option. Enter 1 or 2: ";
-            cin >> sprinklePick;
-        }
-        vector<string> sprinkleAmount;
-        if (sprinklePick == 1)
-            sprinkleAmount.push_back("generous sprinkle");
-        else
-            sprinkleAmount.push_back("generous sprinkles");
+        const auto &opts = measureOptions[pick]; 
+        cout << "Choose amount for " << ingredients.back() << ":\n";
+        for (size_t i = 0; i < opts.size(); ++i)
+            cout << (i + 1) << ". " << opts[i] << "\n";
 
-        cout << "You have selected: " << sprinkleAmount.back()
+        int sel;
+        cin >> sel;
+        while (sel < 1 || sel > static_cast<int>(opts.size()))
+        {
+            cout << "Invalid option. Enter 1-" << opts.size() << ": ";
+            cin >> sel;
+        }
+        string chosenAmount = opts[sel - 1];
+
+        cout << "You have selected: " << chosenAmount
              << " of " << ingredients.back() << endl;
     }
 
